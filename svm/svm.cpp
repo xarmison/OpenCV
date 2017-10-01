@@ -15,17 +15,12 @@ int main(int, char **)
     Mat image = Mat::zeros(height, width, CV_8UC3);
 
     // dados de treinamento 
-    int labels[15] = {1, -1, -1, -1, 1, -1, 1, 1, 1, 1, 1, -1, -1, -1, -1};
-    float trainingData[15][2] = {{501, 10}, {255, 10}, {501, 255},
-                                 {10, 501}, {501, 40}, {200, 22}, 
-                                 {450, 30}, {392, 432}, {250, 459},
-                                 {490, 210}, {490, 490}, {30, 50},
-                                 {260, 120}, {8, 200}, {230, 140}                                
-                                };
+    int labels[10] = {1, 1, 1, 1, 1, -1, -1, -1, -1, -1};
+    float trainingData[10][2] = {{70,70}, {50,50}, {30,30}, {100,120} , {501, 10}, {255, 10}, {501, 255}, {10, 501}, {407, 407}, {508, 210}};
 
     //Dados como objetos da classe Mat                            
-    Mat trainingDataMat(15, 2, CV_32FC1, trainingData);
-    Mat labelsMat(15, 1, CV_32SC1, labels);
+    Mat trainingDataMat(10, 2, CV_32FC1, trainingData);
+    Mat labelsMat(10, 1, CV_32SC1, labels);
 
     // Treinamento da SVM
     Ptr<SVM> svm = SVM::create();
@@ -51,7 +46,7 @@ int main(int, char **)
     int thickness = 1;
     int lineType = 8;
     for(int i=0; i<15; i++){
-        circle(image, Point((int)trainingData[i][0], (int)trainingData[i][1]), 5, Scalar(132, 21, 69), thickness, lineType);
+        circle(image, Point((int)trainingData[i][0], (int)trainingData[i][1]), 5, Scalar(124, 29, 83), thickness, lineType);
     }
   
     // Show support vectors
