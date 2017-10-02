@@ -5,9 +5,9 @@
     "showOutput": "always",
     "args": [
         "-g",
-        "FaceDetection/FaceDetection.cpp",
+        "DigitsClassifier2/test_img.cpp",
         "-o",
-        "FaceDetection/FaceDetection",
+        "DigitsClassifier2/test_img",
         "-I/usr/local/include/opencv",
         "-I/usr/local/include",
         "-L/usr/local/lib",

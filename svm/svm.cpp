@@ -59,7 +59,8 @@ int main(int, char **)
         circle(image, Point((int)v[0], (int)v[1]), 6, Scalar(0, 0, 255), thickness, lineType);
     }
 
-    imwrite("result.png", image);        // save the image
-    imshow("SVM Simple Example", image); // show it to the user
+    svm->save("svm.xml");                // salva a svm
+    imwrite("result.png", image);        // salva a imagem
+    imshow("SVM Simple Example", image); // mostra a imagem
     waitKey(0);
 }
