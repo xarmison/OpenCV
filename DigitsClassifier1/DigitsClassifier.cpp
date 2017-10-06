@@ -151,7 +151,7 @@ void SVMtrain(Mat &trainMat, vector<int> &trainLabels, Mat &testResponse, Mat &t
     svm->setType(SVM::C_SVC);
     Ptr<TrainData> td = TrainData::create(trainMat, ROW_SAMPLE, trainLabels);
     svm->train(td);
-    //svm->trainAuto(td);
+    //svm->trainAuto(td);                                                                                                                           
     svm->save("SVM_Digits_Classifier.yml");
     svm->predict(testMat, testResponse);
     getSVMParams(svm);
