@@ -12,9 +12,15 @@
 // TinyDir
 #include "tinydir.h"
 
+// Testes do tempo de execucao
+#include <ctime>
+
+using namespace std;
+using namespace cv;
+
 // Rotulos dos arquivos de treino
-std::vector<int> labels;
-std::vector<std::string> trainingFilenames;
+vector<int> labels;
+vector<string> trainingFilenames;
 
 
 //Pega os arquivos e teste e salva os rotulos/arquvios em uma classe vector
@@ -33,7 +39,7 @@ void getsTrainingFiles(){
         // se for um diretorio 
         if (file.is_dir){
 
-            std::string numbersDirName = file.name;
+            string numbersDirName = file.name;
 
             // pula . / .. / .DS_Store (OSX)
             if (numbersDirName != "." && numbersDirName != ".." && numbersDirName != ".DS_Store"){
@@ -55,7 +61,7 @@ void getsTrainingFiles(){
                     tinydir_readfile(&training_number_dir, &trainingJpgFile);
 
                     // pega o nome
-                    std::string trainingJpgFileName = trainingJpgFile.name;
+                    string trainingJpgFileName = trainingJpgFile.name;
 
                     // pula . / .. / .DS_Store (OSX)
                     if (trainingJpgFileName != "." && trainingJpgFileName != ".." && trainingJpgFileName != ".DS_Store"){
@@ -94,17 +100,18 @@ int main(int argc, char **argv){
     int imgArea = 28 * 28;
 
     //armazena os dados de treinamento
-    cv::Mat trainingMat(trainingFilenames.size(), imgArea, CV_32FC1);
+    Mat trainingMat(trainingFilenames.size(), imgArea, CV_32FC1);
 
+    int i = clock();
     //itera pelos arquivos de treinamento
-    std::cout << std::endl << "Analizando rotulos ......." << std::endl;
+    cout << endl << "Analizando rotulos ......." << endl;
     for (int index = 0; index < trainingFilenames.size(); index++){
     
         //Mostra em qual arquivo estamos treinando
-        //std::cout << "Analizando rotulo -> arquivo: " << labels[index] << "|" << trainingFilenames[index] << std::endl;
+        //cout << "Analizando rotulo -> arquivo: " << labels[index] << "|" << trainingFilenames[index] << endl;
 
         // le a imagem(grayscale)
-        cv::Mat imgMat = cv::imread(trainingFilenames[index], 0);
+        Mat imgMat = imread(trainingFilenames[index], 0);
 
         int ii = 0; //coluna atual em training_mat
 
@@ -115,6 +122,8 @@ int main(int argc, char **argv){
             }
         }
     }
+    int f = clock();
+    cout << "A analise dos rotulos levou: " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
     //Processa os rotulos 
 
@@ -125,23 +134,26 @@ int main(int argc, char **argv){
         labelsArray[index] = labels[index];
     }
 
-    cv::Mat labelsMat(labels.size(), 1, CV_32S, labelsArray);
+    Mat labelsMat(labels.size(), 1, CV_32S, labelsArray);
 
-    // Treina a SVM
+    // Configura a SVM
     // 'Seta' os parametros(optimal(ish)) da SVM's
-    cv::Ptr<cv::ml::SVM> svm = cv::ml::SVM::create();
-    svm->setType(cv::ml::SVM::C_SVC);
-    svm->setKernel(cv::ml::SVM::POLY);
-    svm->setTermCriteria(cv::TermCriteria(cv::TermCriteria::MAX_ITER, 100, 1e-6));
+    Ptr<ml::SVM> svm = ml::SVM::create();
+    svm->setType(ml::SVM::C_SVC);
+    svm->setKernel(ml::SVM::POLY);
+    svm->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER, 100, 1e-6));
     svm->setGamma(3);
     svm->setDegree(3);
 
     //Treina o classificador 
-    std::cout << "Treinando o classificador......." << std::endl;
-    svm->train(trainingMat, cv::ml::ROW_SAMPLE, labelsMat);
+    i = clock();
+    cout << "Treinando o classificador......." << endl;
+    svm->train(trainingMat, ml::ROW_SAMPLE, labelsMat);
+    f = clock();
+    cout << "O treinamento levou " << (f-i)/(float)CLOCKS_PER_SEC << "s" << endl;
 
     // Salva a SVM
-    std::cout << "Salvando a SVM......." << std::endl;
+    cout << "Salvando a SVM......." << endl;
     svm->save("classifier.yml");
-    std::cout << std::endl;
+    cout << endl;
 }
