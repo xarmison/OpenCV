@@ -1,5 +1,5 @@
 # 1. KEEP UBUNTU OR DEBIAN UP TO DATE
-
+echo 'Updating and Upgrading ...'
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get -y dist-upgrade
@@ -7,7 +7,7 @@ sudo apt-get -y autoremove
 
 
 # 2. INSTALL THE DEPENDENCIES
-
+echo 'Installing the dependencies ...' 
 # Build tools:
 sudo apt-get install -y build-essential cmake
 
@@ -34,7 +34,7 @@ sudo apt-get install -y doxygen
 
 
 # 3. INSTALL THE LIBRARY (YOU CAN CHANGE '3.3.0' FOR THE LAST STABLE VERSION)
-
+echo 'Installing the library ...'
 sudo apt-get install -y unzip wget
 wget https://github.com/opencv/opencv/archive/3.3.0.zip
 unzip 3.3.0.zip
@@ -47,3 +47,5 @@ cmake -DWITH_QT=ON -DWITH_OPENGL=ON -DFORCE_VTK=ON -DWITH_TBB=ON -DWITH_GDAL=ON 
 make -j4
 sudo make install
 sudo ldconfig
+echo 'Done !'
+echo 'Vai dar certo!' 
